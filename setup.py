@@ -1,6 +1,7 @@
 from time import sleep
 import time
 import numpy as np
+from stop_watch import Stopwatch
 from traffic import Traffic
 from traffic_light import Traffic_Light, __init__
 
@@ -42,6 +43,7 @@ if __name__ == '__main__':
     traffic = [traffic_up,  traffic_right,
                traffic_down, traffic_left, traffic_size]
     setup = Setup(traffic)
+    stopwatch = Stopwatch()
 
     # Initialize the state of all drivers (Refer cars.py for states)
     cars_up = traffic[0].initialize_cars()
@@ -52,7 +54,7 @@ if __name__ == '__main__':
 
     # Start traffic light and move cars
     intersection = Traffic()
-    current_lane = intersection.startTrafficLight(traffic)
+    current_lane = intersection.startTrafficLight(traffic, stopwatch)
     # Track the time taken to clear the intersection
     start_time = time.perf_counter()
     # Track the number of rotation taken to clear the intersection
@@ -61,8 +63,10 @@ if __name__ == '__main__':
 
     while (current_lane != -1):
         current_line_of_cars = cars[current_lane]
-        intersection.moveCars(current_line_of_cars, traffic, current_lane)
-        current_lane = intersection.changeTrafficLight(traffic, current_lane)
+        intersection.moveCars(current_line_of_cars,
+                              traffic, current_lane, stopwatch)
+        current_lane = intersection.changeTrafficLight(
+            traffic, current_lane, stopwatch)
         line_of_cars = cars[current_lane]
         if(start_rotation == current_lane):
             total_rotation += 1

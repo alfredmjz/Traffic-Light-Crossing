@@ -115,14 +115,13 @@ class Traffic:
                 "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 sep="\n")
 
-    def startTrafficLight(self, traffic):
+    def startTrafficLight(self, traffic, stopwatch):
         '''
         Chooses a random side of the intersection and begins the rotation
         Precondition:   traffic is a list of Traffic_Light object and is not empty
         Postcondition:  Returns -1 iff traffic_size is 0, positive integer otherwise
         Invariant:      traffic_size != 0
         '''
-
         # If size of traffic = 0
         if (traffic[4] == 0):
             return -1
@@ -130,10 +129,10 @@ class Traffic:
         # Choose a random lane to start the green light for the first time
         lane_to_start = np.random.randint(0, 3)
         traffic[lane_to_start].status = "green"
-        traffic[lane_to_start].green_light_timer = Stopwatch().start()
+        traffic[lane_to_start].green_light_timer = stopwatch.start()
         return lane_to_start
 
-    def changeTrafficLight(self, traffic, current_green_light):
+    def changeTrafficLight(self, traffic, current_green_light, stopwatch):
         '''
         Change color of traffic light from red to green in clockwise rotation
         Precondition:   startTrafficLight must be called before this method
@@ -147,7 +146,7 @@ class Traffic:
             return -1
 
         index = current_green_light
-        traffic[index].green_light_timer = Stopwatch().elapsedTime()
+        traffic[index].green_light_timer = stopwatch.elapsedTime()
         traffic[index].status = "red"
 
         # If current light is left intersection, next light is upper intersection
@@ -157,10 +156,10 @@ class Traffic:
             index += 1
 
         # Start timer for new green light
-        traffic[index].green_light_timer = Stopwatch().start()
+        traffic[index].green_light_timer = stopwatch.start()
         return index
 
-    def moveCars(self, line_of_cars, traffic, current_lane):
+    def moveCars(self, line_of_cars, traffic, current_lane, stopwatch):
         '''
         Moves car when the light is green and update length of traffic for each lane respectively
         Precondition:   startTrafficLight must be called before this method
@@ -174,12 +173,14 @@ class Traffic:
             print("No cars in lane...waiting for traffic light to pass")
             elapsed_time = 0
             while(True):
-                elapsed_time = int(time.time()) - \
-                    traffic[current_lane].green_light_timer
+                elapsed_time = stopwatch.elapsedTime()
                 if(elapsed_time > 6):
+                    print("Changing traffic light.....")
                     break
                 if(elapsed_time == seconds):
+                    print("{} seconds left".format(6 - seconds))
                     seconds += 1
+
             return
 
         index = 0
@@ -199,5 +200,5 @@ class Traffic:
                 index += 1
                 seconds += 1 + delay
                 print("----------------------------------------\n")
-            elapsed_time = int(time.time()) - \
-                traffic[current_lane].green_light_timer
+            elapsed_time = stopwatch.elapsedTime(
+            ) - traffic[current_lane].green_light_timer
