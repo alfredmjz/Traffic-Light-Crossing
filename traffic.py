@@ -170,35 +170,46 @@ class Traffic:
         if(traffic[current_lane].number_of_traffic == 0):
             self.display(traffic, current_lane)
             seconds = 0
-            print("No cars in lane...waiting for traffic light to pass")
             elapsed_time = 0
+
+            print("No cars in lane...waiting for traffic light to pass")
             while(True):
                 elapsed_time = stopwatch.elapsedTime()
                 if(elapsed_time > 6):
                     print("Changing traffic light.....")
                     break
-                if(elapsed_time == seconds):
-                    print("{} seconds left".format(6 - seconds))
+                elif(elapsed_time == seconds):
+                    print("{} seconds left".format(7 - elapsed_time))
                     seconds += 1
-
             return
 
         index = 0
-        delay = 0
         seconds = 0
-        length_of_line = traffic[current_lane].number_of_traffic
         elapsed_time = 0
+        duration = 0
+        control_timer = Stopwatch()
+        time_holder = 0
+        length_of_line = traffic[current_lane].number_of_traffic
 
         while(True):
+            control_timer.start()
+            delay = 0
             if(elapsed_time > 6):
+                print("Changing traffic light...")
                 break
-            if((elapsed_time == seconds) and (index <= length_of_line - 1) and (length_of_line >= 0)):
+            elif((elapsed_time == seconds) and (index <= length_of_line - 1) and (length_of_line >= 0)):
                 self.display(traffic, current_lane)
                 delay = line_of_cars[index].delayOnGreen()
                 traffic[current_lane].number_of_traffic -= 1
                 traffic[4] -= 1
                 index += 1
                 seconds += 1 + delay
+
+            if(control_timer.elapsedTime() == duration and duration <= 6):
+                duration += 1
+                if(delay > 0):
+                    print(
+                        "HONK..HONK. Driver is finally moving...Delayed: ", delay, " seconds")
+                print("{} seconds left".format(control_timer.elapsedTime()))
                 print("----------------------------------------\n")
-            elapsed_time = stopwatch.elapsedTime(
-            ) - traffic[current_lane].green_light_timer
+            elapsed_time = stopwatch.elapsedTime() + delay

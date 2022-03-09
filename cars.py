@@ -1,4 +1,7 @@
+from time import sleep
 import numpy as np
+
+
 class Car:
     def __init__(self):
         '''
@@ -6,9 +9,9 @@ class Car:
         Precondition:   The number of Car object to construct is equivalent to the number_of_traffic (refer to traffic_light.py)
         Postcondition:  Each Car object is given only ONE randomized state that is immutable
         '''
-        state = { 0:"strict", 1:"tired", 2:"unattentive", 3:"distracted"}
+        state = {0: "strict", 1: "tired", 2: "unattentive", 3: "distracted"}
         last_index = len(state) - 1
-        selected = state[np.random.randint(0,last_index)]
+        selected = state[np.random.randint(0, last_index)]
         self.state = selected
 
     def delayOnGreen(self):
@@ -25,7 +28,8 @@ class Car:
             delay = 0
         elif current_state == 'tired':
             delay = 1
+            print("Driver is tired\n")
         elif current_state == 'unattentive' or 'distracted':
-            delay = np.random.randint(2,3)
+            delay = np.random.randint(2, 3)
+            print("Driver is " + current_state + "\n")
         return delay
-
