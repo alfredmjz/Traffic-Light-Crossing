@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # Start traffic light and move cars
     intersection = Traffic()
     current_lane = intersection.startTrafficLight(traffic, stopwatch)
-    # Track the time taken to clear the intersection
+    # Start time counter for the simulation
     start_time = time.perf_counter()
     # Track the number of rotation taken to clear the intersection
     start_rotation = current_lane

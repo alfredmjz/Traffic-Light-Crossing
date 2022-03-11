@@ -1,3 +1,4 @@
+from time import sleep
 import numpy as np
 from stop_watch import Stopwatch
 from text_colors import TextColors
@@ -144,9 +145,10 @@ class Traffic:
         '''
         if (traffic[4] == 0):
             return -1
-
         index = current_green_light
-        traffic[index].green_light_timer = stopwatch.elapsedTime()
+        start_timer = traffic[index].green_light_timer
+
+        traffic[index].green_light_timer = stopwatch.elapsedTime(start_timer)
         traffic[index].status = "red"
 
         # If current light is left intersection, next light is upper intersection
@@ -166,20 +168,21 @@ class Traffic:
                         traffic is a list of Traffic_Light object and is not empty
         Postcondition:  Number of cars in the intersection decreases until 0
         '''
+        start_timer = traffic[current_lane].green_light_timer
 
         if(traffic[current_lane].number_of_traffic == 0):
             self.display(traffic, current_lane)
             seconds = 0
-            elapsed_time = 0
 
             print("No cars in lane...waiting for traffic light to pass")
             while(True):
-                elapsed_time = stopwatch.elapsedTime()
+                elapsed_time = stopwatch.elapsedTime(start_timer)
                 if(elapsed_time > 6):
                     print("Changing traffic light.....")
                     break
                 elif(elapsed_time == seconds):
-                    print("{} seconds left".format(7 - elapsed_time))
+                    print((7 - elapsed_time), "seconds left",
+                          sep=' ', end='\r', flush=True)
                     seconds += 1
             return
 
@@ -187,29 +190,34 @@ class Traffic:
         seconds = 0
         elapsed_time = 0
         duration = 0
-        control_timer = Stopwatch()
-        time_holder = 0
+        delay = 0
+
+        honkNext = False
+
         length_of_line = traffic[current_lane].number_of_traffic
 
         while(True):
-            control_timer.start()
-            delay = 0
             if(elapsed_time > 6):
                 print("Changing traffic light...")
                 break
-            elif((elapsed_time == seconds) and (index <= length_of_line - 1) and (length_of_line >= 0)):
+
+            if(elapsed_time == duration):
+                duration += 1
                 self.display(traffic, current_lane)
+
+                if(elapsed_time == seconds and honkNext):
+                    print(
+                        "HONK..HONK. Driver is finally moving...Delayed: ", delay, " seconds")
+                    honkNext = False
+                print(7 - elapsed_time, "seconds left",
+                      sep=' ', end='\r', flush=True)
+
+            elif((elapsed_time == seconds) and (index <= length_of_line - 1) and (length_of_line >= 0)):
                 delay = line_of_cars[index].delayOnGreen()
                 traffic[current_lane].number_of_traffic -= 1
                 traffic[4] -= 1
                 index += 1
                 seconds += 1 + delay
+                honkNext = True if (delay > 0) else False
 
-            if(control_timer.elapsedTime() == duration and duration <= 6):
-                duration += 1
-                if(delay > 0):
-                    print(
-                        "HONK..HONK. Driver is finally moving...Delayed: ", delay, " seconds")
-                print("{} seconds left".format(control_timer.elapsedTime()))
-                print("----------------------------------------\n")
-            elapsed_time = stopwatch.elapsedTime() + delay
+            elapsed_time = stopwatch.elapsedTime(start_timer)

@@ -9,5 +9,5 @@ class Stopwatch:
         self.startTime = int(time.time())
         return self.startTime
 
-    def elapsedTime(self):
-        return int(time.time()) - self.startTime
+    def elapsedTime(self, timer):
+        return int(time.time()) - timer
