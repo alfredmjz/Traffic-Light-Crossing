@@ -39,9 +39,8 @@ if __name__ == '__main__':
     traffic_right = Traffic_Light("right")
     traffic_down = Traffic_Light("down")
     # Appends objects into list and intialize the environment
-    traffic_size = 0
     traffic = [traffic_up,  traffic_right,
-               traffic_down, traffic_left, traffic_size]
+               traffic_down, traffic_left, 0]
     setup = Setup(traffic)
     stopwatch = Stopwatch()
 
@@ -54,6 +53,7 @@ if __name__ == '__main__':
 
     # Start traffic light and move cars
     intersection = Traffic()
+    traffic_size = traffic[4]
     current_lane = intersection.startTrafficLight(traffic, stopwatch)
     # Start time counter for the simulation
     start_time = time.perf_counter()
@@ -72,5 +72,5 @@ if __name__ == '__main__':
             total_rotation += 1
 
     elapsed_time = int(time.perf_counter() - start_time)
-    print("Intersection is cleared.\nTotal time taken: {}s,\t Total rotation taken: {}".format(
-        elapsed_time, total_rotation))
+    print("Intersection is cleared.\nTotal time taken: {}s, \tTotal number of cars: {},\t Total rotation taken: {}".format(
+        elapsed_time, traffic_size, total_rotation))

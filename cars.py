@@ -29,7 +29,10 @@ class Car:
         elif current_state == 'tired':
             delay = 1
             print("Driver is tired\n")
-        elif current_state == 'unattentive' or 'distracted':
-            delay = np.random.randint(2, 3)
+        elif current_state == 'unattentive':
+            delay = np.random.randint(1, 4)
+            print("Driver is " + current_state + "\n")
+        elif current_state == 'distracted':
+            delay = np.random.randint(2, 4)
             print("Driver is " + current_state + "\n")
         return delay

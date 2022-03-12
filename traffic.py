@@ -27,12 +27,11 @@ class Traffic:
         '''
         if(active_lane == 0):
             print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:<9}|{:<8}".format("", "", ""),
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                       "", TextColors.GREEN, traffic[active_lane].number_of_traffic, TextColors.RESET, ""),
                   sep="\n")
             print("________|{:<9}|________".format(""),
-                  "\t\t\t",
+                  "\t",
                   "{}{:^13}{:^13}{}".format(
                 TextColors.RED, traffic[3].number_of_traffic, traffic[1].number_of_traffic, TextColors.RESET),
                 "________{:<11}________".format(""),
@@ -41,16 +40,14 @@ class Traffic:
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                 "", TextColors.RED, traffic[2].number_of_traffic, TextColors.RESET, ""),
                 "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 sep="\n")
         elif(active_lane == 1):
             print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:<9}|{:<8}".format("", "", ""),
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                       "", TextColors.RED, traffic[0].number_of_traffic, TextColors.RESET, ""),
                   sep="\n")
             print("________|{:<9}|________".format(""),
-                  "\t\t\t",
+                  "\t",
                   "{:^13}{}{:^13}{}{}".format(
                 TextColors.RED, traffic[3].number_of_traffic, TextColors.GREEN, traffic[active_lane].number_of_traffic, TextColors.RESET),
                 "________{:<11}________".format(""),
@@ -59,16 +56,14 @@ class Traffic:
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                 "", TextColors.RED, traffic[2].number_of_traffic, TextColors.RESET, ""),
                 "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 sep="\n")
         elif(active_lane == 2):
             print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:<9}|{:<8}".format("", "", ""),
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                       "", TextColors.RED, traffic[0].number_of_traffic, TextColors.RESET, ""),
                   sep="\n")
             print("________|{:<9}|________".format(""),
-                  "\t\t\t",
+                  "\t",
                   "{}{:^13}{:^13}{}".format(
                 TextColors.RED, traffic[3].number_of_traffic, traffic[1].number_of_traffic, TextColors.RESET),
                 "________{:<11}________".format(""),
@@ -77,16 +72,14 @@ class Traffic:
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                 "", TextColors.GREEN, traffic[active_lane].number_of_traffic, TextColors.RESET, ""),
                 "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 sep="\n")
         elif(active_lane == 3):
             print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:<9}|{:<8}".format("", "", ""),
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                       "", TextColors.RED, traffic[0].number_of_traffic, TextColors.RESET, ""),
                   sep="\n")
             print("________|{:<9}|________".format(""),
-                  "\t\t\t",
+                  "\t",
                   "{}{:^13}{}{:^13}{}".format(
                       TextColors.GREEN, traffic[active_lane].number_of_traffic, TextColors.RED, traffic[1].number_of_traffic, TextColors.RESET),
                   "________{:<11}________".format(""),
@@ -94,25 +87,6 @@ class Traffic:
             print("{:<8}|{:<9}|{:<8}".format("", "", ""),
                   "{:<8}|{}{:^9}{}|{:<8}".format(
                 "", TextColors.RED, traffic[2].number_of_traffic, TextColors.RESET, ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                sep="\n")
-        else:
-            print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:^9}|{:<8}".format(
-                "", traffic[0].number_of_traffic, ""),
-                sep="\n")
-            print("________|{:<9}|________".format(""),
-                  "\t\t\t",
-                  "{:^13}{:^13}".format(
-                traffic[3].number_of_traffic, traffic[1].number_of_traffic),
-                "________{:<11}________".format(""),
-                sep="\n")
-            print("{:<8}|{:<9}|{:<8}".format("", "", ""),
-                  "{:<8}|{:^9}|{:<8}".format(
-                "", traffic[2].number_of_traffic, ""),
-                "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 "{:<8}|{:<9}|{:<8}".format("", "", ""),
                 sep="\n")
 
@@ -146,9 +120,8 @@ class Traffic:
         if (traffic[4] == 0):
             return -1
         index = current_green_light
-        start_timer = traffic[index].green_light_timer
 
-        traffic[index].green_light_timer = stopwatch.elapsedTime(start_timer)
+        traffic[index].green_light_timer = stopwatch.elapsedTime()
         traffic[index].status = "red"
 
         # If current light is left intersection, next light is upper intersection
@@ -168,7 +141,6 @@ class Traffic:
                         traffic is a list of Traffic_Light object and is not empty
         Postcondition:  Number of cars in the intersection decreases until 0
         '''
-        start_timer = traffic[current_lane].green_light_timer
 
         if(traffic[current_lane].number_of_traffic == 0):
             self.display(traffic, current_lane)
@@ -176,7 +148,7 @@ class Traffic:
 
             print("No cars in lane...waiting for traffic light to pass")
             while(True):
-                elapsed_time = stopwatch.elapsedTime(start_timer)
+                elapsed_time = stopwatch.elapsedTime()
                 if(elapsed_time > 6):
                     print("Changing traffic light.....")
                     break
@@ -189,35 +161,39 @@ class Traffic:
         index = 0
         seconds = 0
         elapsed_time = 0
-        duration = 0
+        duration = 1
         delay = 0
-
         honkNext = False
 
-        length_of_line = traffic[current_lane].number_of_traffic
-
         while(True):
-            if(elapsed_time > 6):
-                print("Changing traffic light...")
-                break
-
             if(elapsed_time == duration):
+                if(elapsed_time > 6):
+                    print("Changing traffic light...")
+                    print("--------------------------------------------")
+                    break
+
+                elif(traffic[current_lane].number_of_traffic <= 0):
+                    print(7 - elapsed_time, "seconds left",
+                          sep=' ', end='\r')
+
+                else:
+                    self.display(traffic, current_lane)
+                    if(elapsed_time == seconds and honkNext):
+                        print(
+                            "HONK..HONK! Driver is finally moving...Delayed: ", delay, " seconds\n")
+                        honkNext = False
+                    print(7 - elapsed_time, "seconds left",
+                          sep=' ', end='\r')
                 duration += 1
-                self.display(traffic, current_lane)
 
-                if(elapsed_time == seconds and honkNext):
-                    print(
-                        "HONK..HONK. Driver is finally moving...Delayed: ", delay, " seconds")
-                    honkNext = False
-                print(7 - elapsed_time, "seconds left",
-                      sep=' ', end='\r', flush=True)
-
-            elif((elapsed_time == seconds) and (index <= length_of_line - 1) and (length_of_line >= 0)):
+            elif((traffic[current_lane].number_of_traffic > 0) and (honkNext == False) and (elapsed_time == seconds)):
                 delay = line_of_cars[index].delayOnGreen()
                 traffic[current_lane].number_of_traffic -= 1
                 traffic[4] -= 1
-                index += 1
                 seconds += 1 + delay
-                honkNext = True if (delay > 0) else False
+                if (delay > 0):
+                    honkNext = True
+                else:
+                    honkNext = False
 
-            elapsed_time = stopwatch.elapsedTime(start_timer)
+            elapsed_time = stopwatch.elapsedTime()

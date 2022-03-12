@@ -1,6 +1,7 @@
 from cars import *
 from exception import *
 
+
 class Traffic_Light:
     def __init__(self, direction):
         '''
@@ -19,17 +20,16 @@ class Traffic_Light:
         status = current color of light of the traffic light
         '''
         try:
-            if(bool(direction != "up") and bool(direction != "down") and bool(direction != "left") and bool(direction != "right")): 
+            if(bool(direction != "up") and bool(direction != "down") and bool(direction != "left") and bool(direction != "right")):
                 raise WrongValueError
             self.direction = direction
             self.number_of_traffic = 0
-            self.red_light_timer = 0
             self.green_light_timer = 0
             self.status = 'red'
         except WrongValueError:
             print("{} is not accepted".format(direction),
-            "direction can only be one of the following: ['up','left','right','down']",
-            sep="\n")
+                  "direction can only be one of the following: ['up','left','right','down']",
+                  sep="\n")
 
     def initialize_cars(self):
         '''
@@ -41,5 +41,3 @@ class Traffic_Light:
         inTraffic = []
         [inTraffic.append(Car()) for _ in range(self.number_of_traffic)]
         return inTraffic
-
-    
