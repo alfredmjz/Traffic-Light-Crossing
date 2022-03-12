@@ -2,4 +2,4 @@
 []  -   Add accident effect
 [/]  -   Add real-time calculation for change of traffic light color
 []  -   Add and implement amber traffic light color
-[]  -   Add "honk", delay if exist will be reduced to 0 after 'honk'
+[/]  -   Add "honk", delay if exist will be reduced to 0 after 'honk'
